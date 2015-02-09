@@ -6,6 +6,7 @@
          '[clojure.java.io  :as io]
          '[clojure.string   :as s])
 
+
 (defn and2 [a b]
   (and a b))
 
@@ -35,6 +36,9 @@
   (map (comp read-string second)
        (re-seq #"([-]?[0-9]*\.?[0-9]+)" string)))
 ;(get-floats "0.23,-2342.2323 -900.1") # (0.23 -2342.2323 -900.1)
+
+(defn read-n-round [num-str]
+  (Math/round (double (read-string num-str))))
 
 ; @param {String} translate-str - "translate(0,-752.00213)"
 ; @return {hashmap} {:x 0 :y -752.00213}
@@ -108,7 +112,7 @@
   {:className "Path"
    :attrs
    {:data        path-data
-    :strokeWidth (:stroke-width s)
+    :strokeWidth (read-string (:stroke-width s))
     :stroke      (:stroke s)
     :lineCap     (:stroke-linecap s)}})))
 
@@ -125,8 +129,8 @@
         transform-data (:transform (:attrs graphic-data))
         translate-data (parse-translate-data transform-data)]
   {:className "Group"
-   :attrs {:width  (:width attrs)
-           :height (:height attrs)}
+   :attrs {:width  (read-n-round (:width attrs))
+           :height (read-n-round (:height attrs))}
    :children (map #(xml-path->json-path % translate-data) paths)}))
 
 ;(svg->kinetic-json  
@@ -151,4 +155,4 @@
   (doseq [[name json] json-datas]
     (write-json-file (str name ".js") json))))
 
-(convert-xmls->jsons "img/")
+;(convert-xmls->jsons "img/")

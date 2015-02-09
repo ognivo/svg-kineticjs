@@ -1,6 +1,9 @@
 # SVG -> KineticJS
 
-Clojure REPL-based tool to convert svg files into KineticJS nodes.
+Tool to convert svg files into KineticJS parseable nodes.
+
+## Usage
+java -jar target/svg-node.jar directory/with/svg/files/
 
 
 ## License
